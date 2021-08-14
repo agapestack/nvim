@@ -25,3 +25,15 @@ nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-n> :NERDTree<CR>
 autocmd VimEnter * NERDTree | wincmd p
+
+
+set number
+set nowrap
+set smartcase
+set hlsearch
+set noerrorbells
+set tabstop=4 softtabstop=4
+set expandtab
+set smartindent
+syntax on
+
