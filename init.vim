@@ -16,6 +16,7 @@ Plug 'preservim/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Townk/vim-autoclose'
+Plug 'chrisbra/vim-autosave'
 
 call plug#end()
 
