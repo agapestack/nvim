@@ -15,6 +15,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'preservim/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'Townk/vim-autoclose'
 
 call plug#end()
 
@@ -32,8 +33,10 @@ set nowrap
 set smartcase
 set hlsearch
 set noerrorbells
-set tabstop=4 softtabstop=4
+set tabstop=4 
+set shiftwidth=4
 set expandtab
 set smartindent
 syntax on
+
 
