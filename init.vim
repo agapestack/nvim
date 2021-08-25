@@ -1,4 +1,4 @@
-"   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+"curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 "     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 
@@ -17,6 +17,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Townk/vim-autoclose'
 Plug 'chrisbra/vim-autosave'
+Plug 'christoomey/vim-tmux-navigator'
 
 call plug#end()
 
@@ -48,7 +49,7 @@ inoremap { {}<left>
 inoremap {<CR> {<CR>}<ESC>O
 inoremap {;<CR> {<CR>};<ESC>O
 
-
+" auto-save timer in ms
 
 
 
