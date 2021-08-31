@@ -7,18 +7,33 @@ set nocompatible		" iMproved version required
 filetype off 			" required
 set number
 
-
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-fugitive'
 Plug 'preservim/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Townk/vim-autoclose'
 Plug 'chrisbra/vim-autosave'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'vimsence/vimsence'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc-tsserver', {'dod': 'yarn install --frozen-lockfile'}
+Plug 'amiralies/coc-discord'
+Plug 'neoclide/coc-vetur'
+Plug 'haishanh/coc-swagger'
+Plug 'fannheyward/coc-sql'
+Plug 'josa42/coc-sh'
+Plug 'josa42/coc-go'
+Plug 'neoclide/coc-html'
+Plug 'neoclide/coc-python'
+Plug 'neoclide/coc-json'
+Plug 'neoclide/coc-java'
+Plug 'neoclide/coc-html'
+Plug 'neoclide/coc-css'
+Plug 'voldikss/coc-cmake'
+Plug 'clangd/coc-clangd'
+
 
 call plug#end()
 
