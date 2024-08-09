@@ -55,7 +55,7 @@ return {
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
 					local client = vim.lsp.get_client_by_id(event.data.client_id)
-					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+					if client and client.supports_method("textDocument/documentHighlight") then
 						local highlight_augroup = vim.api.nvim_create_augroup("my-lsp-highlight", { clear = false })
 						vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 							buffer = event.buf,
@@ -78,9 +78,9 @@ return {
 						})
 					end
 
-					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+					if client and client.supports_method("textDocument/inlayHint") then
 						map("<leader>th", function()
-							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
+							vim.lsp.inlay_hint({ bufnr = event.buf, toggle = true })
 						end, "[T]oggle Inlay [H]ints")
 					end
 				end,
@@ -106,16 +106,17 @@ return {
 
 			-- Setup Mason and ensure required servers and tools are installed
 			require("mason").setup()
-			local ensure_installed = vim.tbl_keys(servers)
-			vim.list_extend(ensure_installed, { "stylua" }) -- Additional tools
-			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
 			require("mason-lspconfig").setup({
+				ensure_installed = { "lua_ls", "pyright", "tsserver" }, -- Add more language servers as needed
 				handlers = {
 					function(server_name)
-						local server = servers[server_name] or {}
-						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						require("lspconfig")[server_name].setup(server)
+						local opts = {
+							capabilities = vim.lsp.protocol.make_client_capabilities(),
+						}
+						if servers[server_name] then
+							opts = vim.tbl_deep_extend("force", opts, servers[server_name])
+						end
+						require("lspconfig")[server_name].setup(opts)
 					end,
 				},
 			})
