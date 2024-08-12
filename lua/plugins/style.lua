@@ -20,38 +20,36 @@ return {
 		},
 		config = function()
 			require("noice").setup({
-				-- Configuration options for Noice
-				cmdline = {
-					enabled = true, -- Enable enhanced command line
-					view = "cmdline", -- View for the command line
-				},
-				messages = {
-					enabled = true, -- Enable message enhancements
-				},
-				popupmenu = {
-					enabled = true, -- Enable popup menu enhancements
-				},
-				lsp = {
-					progress = {
-						enabled = true, -- Enable LSP progress
+				views = {
+					cmdline_popup = {
+						position = {
+							row = 5,
+							col = "50%",
+						},
+						size = {
+							width = 60,
+							height = "auto",
+						},
 					},
-					signature = {
-						enabled = true, -- Enable signature help
-					},
-					hover = {
-						enabled = true, -- Enable hover documentation
-					},
-					override = {
-						-- Override markdown rendering so that **noice** can handle it
-						["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-						["vim.lsp.util.stylize_markdown"] = true,
-						["cmp.entry.get_documentation"] = true,
+					popupmenu = {
+						relative = "editor",
+						position = {
+							row = 8,
+							col = "50%",
+						},
+						size = {
+							width = 60,
+							height = 10,
+						},
+						border = {
+							style = "rounded",
+							padding = { 0, 1 },
+						},
+						win_options = {
+							winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
+						},
 					},
 				},
-				notify = {
-					enabled = true, -- Use nvim-notify for notifications
-				},
-				-- More configuration options can be added here
 			})
 		end,
 	},
