@@ -10,31 +10,69 @@ return {
 				{ path = "luvit-meta/library", words = { "vim%.uv" } },
 			},
 		},
-	},
-
-	-- Luvit meta for type annotations
+	}, -- Luvit meta for type annotations
 	{ "Bilal2453/luvit-meta", lazy = true },
 
 	-- Main LSP configuration
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
-			-- Automatically install LSPs and related tools
-			{ "williamboman/mason.nvim", config = true }, -- Must be loaded before dependents
+			{ "williamboman/mason.nvim", config = true },
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
-
-			-- Useful status updates for LSP
 			{ "j-hui/fidget.nvim", opts = {} },
-
-			-- Adds extra capabilities for nvim-cmp
 			"hrsh7th/cmp-nvim-lsp",
 		},
 		config = function()
+			-- Global table to track notified servers
+			local notified_servers = {}
+
 			-- Function that runs when an LSP attaches to a buffer
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("my-lsp-attach", { clear = true }),
 				callback = function(event)
+					local client = vim.lsp.get_client_by_id(event.data.client_id)
+
+					-- Ensure we have a valid client
+					if not client then
+						return
+					end
+
+					-- Collect supported features
+					local supported_features = {}
+					if client.server_capabilities.definitionProvider then
+						table.insert(supported_features, "Definition")
+					end
+					if client.server_capabilities.referenceProvider then
+						table.insert(supported_features, "References")
+					end
+					if client.server_capabilities.implementationProvider then
+						table.insert(supported_features, "Implementation")
+					end
+					if client.server_capabilities.typeDefinitionProvider then
+						table.insert(supported_features, "Type Definition")
+					end
+					if client.server_capabilities.hoverProvider then
+						table.insert(supported_features, "Hover")
+					end
+
+					-- Convert features list to string
+					local supported_features_str = table.concat(supported_features, ", ")
+
+					-- Check if we've notified about this LSP server already
+					if not notified_servers[client.name] then
+						-- Notify using vim.notify (fallback to nvim-notify if not using noice)
+						vim.notify(
+							"LSP server supports: " .. supported_features_str,
+							"info",
+							{ title = "LSP Supported Features" }
+						)
+
+						-- Mark this LSP server as notified
+						notified_servers[client.name] = true
+					end
+
+					-- Key mappings for LSP functions
 					local map = function(keys, func, desc)
 						vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
@@ -54,7 +92,7 @@ return {
 					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
-					local client = vim.lsp.get_client_by_id(event.data.client_id)
+					-- Highlight and inlay hints
 					if client and client.supports_method("textDocument/documentHighlight") then
 						local highlight_augroup = vim.api.nvim_create_augroup("my-lsp-highlight", { clear = false })
 						vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
@@ -107,7 +145,7 @@ return {
 			-- Setup Mason and ensure required servers and tools are installed
 			require("mason").setup()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "lua_ls", "pyright", "tsserver" }, -- Add more language servers as needed
+				ensure_installed = { "lua_ls", "pyright", "tsserver" },
 				handlers = {
 					function(server_name)
 						local opts = {
@@ -119,23 +157,6 @@ return {
 						require("lspconfig")[server_name].setup(opts)
 					end,
 				},
-			})
-		end,
-	},
-
-	-- Mason tool installer for managing formatters and linters
-	{
-		"WhoIsSethDaniel/mason-tool-installer.nvim",
-		config = function()
-			require("mason-tool-installer").setup({
-				ensure_installed = {
-					"prettier", -- JavaScript/TypeScript formatter
-					"black", -- Python formatter
-					"eslint_d", -- JavaScript/TypeScript linter
-					"flake8", -- Python linter
-				},
-				auto_update = false,
-				run_on_start = true, -- Install/update tools on startup
 			})
 		end,
 	},
