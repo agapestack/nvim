@@ -13,16 +13,19 @@ return {
 							["<C-p>"] = require("telescope.actions").move_selection_previous,
 						},
 					},
+					-- Ensure the search starts from the current working directory
+					cwd = vim.fn.getcwd(),
+					-- Include hidden files
+					find_command = { "rg", "--files", "--hidden", "--glob", "!.git/*" },
 				},
 			})
 
 			-- Telescope keymaps
-			local map = vim.api.nvim_set_keymap
 			local opts = { noremap = true, silent = true }
-			map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
-			map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", opts)
-			map("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
-			map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", opts)
+			vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
+			vim.keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", opts)
+			vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
+			vim.keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", opts)
 		end,
 	},
 
