@@ -145,7 +145,7 @@ return {
 			-- Setup Mason and ensure required servers and tools are installed
 			require("mason").setup()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "lua_ls", "pyright", "tsserver" },
+				ensure_installed = { "lua_ls", "pyright" },
 				handlers = {
 					function(server_name)
 						local opts = {
